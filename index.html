@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>FS5 SC-10 안 N2 셀 인서트 배치 v5</title>
+<title>FS5 SC-10 안 N2 셀 인서트 배치 v6</title>
 <style>
   :root { --bg:#eef0f3; --ink:#1d2430; --line:#cfd5de; --acc:#1f3b63; --m:#1a8f3c; --e:#c47f00; --a:#6b7280; }
   * { box-sizing: border-box; }
@@ -37,7 +37,7 @@
 </style>
 </head>
 <body>
-<h1>FS5 SC-10 안 N2 셀 인서트 배치 v5 (러프, 2026-11-14)</h1>
+<h1>FS5 SC-10 안 N2 셀 인서트 배치 v6 (러프, 2026-11-14)</h1>
 <div id="stage"><div id="status">모델을 읽는 중…</div></div>
 <div id="panel">
   <div class="row views" id="views">
@@ -51,18 +51,21 @@
     <span class="lab">인서트</span><span class="seg" id="sIns"><button data-v="stock">순정</button><button data-v="ours" class="on">우리 N2 셀</button></span>
     <span class="lab">뚜껑 안</span><span class="seg" id="sLid"><button data-v="A" class="on">(A) 덧테</button><button data-v="B">(B) 관통 판</button></span>
   </div>
+  <div class="row"><span class="lab">측정 구간</span><button data-p="before">조명 전: Xe로 읽기</button><button data-p="during">동작 중: 백색(+940)</button><button data-p="after">조명 끈 뒤: Xe로 회복 읽기</button></div>
+  <div class="row"><span class="lab">시료</span><span class="seg" id="sSam"><button data-v="single">단일접합 (백색만)</button><button data-v="2T" class="on">2T 탠덤 (백색 + 940)</button></span></div>
   <div class="row" id="toggles"></div>
   <div id="info"><b>부품을 눌러 보세요</b><br>누르면 이름, 한 줄 설명, 치수 출처(자 사진 / 사진 추정 / 가정)가 여기에 나옵니다.</div>
   <ul id="foot">
     <li>벽 윗변까지 깊이 230 mm와 빔 높이 40 mm는 자 사진의 원근에서 추정한 값입니다 (범위 200~260 mm, 32~48 mm).</li>
     <li>안쪽 폭 187 mm, 길이 300 mm, 받침판 72 mm는 자 사진에서 읽은 값입니다 (오차 약 ±10 %).</li>
     <li>시료 기울기 20°, 인서트 고정 나사(M3, 간격 20 mm), 셀·광섬유·덧테·관통 판 치수는 가정입니다. 겉모양은 사진을 보고 단순화했습니다.</li>
+    <li>조명 각 ±12°(시료 법선 기준 좌우)와 필터 치수(단파장 통과 Ø12.7 × 3, 장파장 통과 25 × 25 × 2)는 가정입니다.</li>
     <li>검토용 러프 배치이며 제작 도면이 아닙니다. 한 손가락으로 돌리고, 두 손가락으로 확대하거나 옮깁니다.</li>
   </ul>
 </div>
 <script src="three_core.js"></script>
 <script src="gltf_loader.js"></script>
-<script src="pl_v5_model.js"></script>
+<script src="pl_v6_model.js"></script>
 <script>
 (function () {
   'use strict';
@@ -90,7 +93,7 @@
     [/^lid front skirt/, '뚜껑 앞 가림판', '낮은 앞벽 위의 틈을 막는 판.', 'A'],
     [/^lid inner plate screw/, '뚜껑 안 판 나사', '뚜껑 안쪽 판을 고정하는 나사 2개 (사진).', 'E'],
     [/^lid inner plate/, '뚜껑 안쪽 판 (순정)', '사진에서 뚜껑 안쪽에 나사 2개로 붙어 있는 약 100 × 110 mm 판.', 'E'],
-    [/^collar/, '덧테 (출력, 높이 12 mm)', '윗 테두리에 얹는 검은 틀. 오른쪽에 광섬유·N2 튜브·FFC가 나가는 홈 4개.', 'A'],
+    [/^collar/, '덧테 (출력, 높이 12 mm)', '윗 테두리에 얹는 검은 틀. 오른쪽에 광섬유 2개·N2 튜브 2개·FFC가 나가는 홈 5개.', 'A'],
     [/^SC-10 base/, 'SC-10 받침판', '약 72 mm 정사각 (자 사진). 두께 6 mm는 가정, 모서리 나사 4개.', 'M'],
     [/^base plate screw/, '받침판 나사', '받침판 모서리 나사.', 'E'],
     [/^SC-10 stage/, 'SC-10 스테이지 (가이드)', '초점 방향(앞뒤)으로 가는 25 mm 직선 스테이지. 크기 40 × 72 × 6 mm는 가정.', 'A'],
@@ -102,8 +105,8 @@
     [/^rod/, '봉 Ø8', '커플링에서 앞벽을 지나 밖으로 나가는 검은 봉. 카세트 안 길이 약 150 mm는 자 사진.', 'M'],
     [/^knob/, '봉 끝 손잡이', '앞판 밖에서 손으로 돌려 초점을 맞추는 작은 손잡이 Ø28 × 12 mm (널링은 생략).', 'A'],
     [/^filter fork tips/, '필터 홀더 끝단 (은색)', '필터를 잡는 갈래 끝의 은색 부분.', 'E'],
-    [/^filter fork \(excitation/, '필터 홀더 (여기 쪽, 왼쪽)', '받침판 앞쪽 모서리, 중심선에서 −45° 방향으로 선 갈래 모양 홀더. 빔은 두 갈래 사이를 지납니다.', 'E'],
-    [/^filter fork/, '필터 홀더 (발광 쪽, 오른쪽)', '받침판 앞쪽 모서리, +45° 방향 갈래 모양 홀더. 빔은 두 갈래 사이를 지납니다.', 'E'],
+    [/^filter fork \(excitation/, '필터 홀더 (여기 쪽, 왼쪽)', '받침판 앞쪽 모서리, 중심선에서 −45° 방향으로 선 갈래 모양 홀더. Xe 여기빔은 두 갈래 사이를 지납니다(필터 없음).', 'E'],
+    [/^filter fork/, '필터 홀더 (발광 쪽, 오른쪽)', '받침판 앞쪽 모서리, +45° 방향 갈래 모양 홀더. 장파장 통과 필터를 꽂아 쓰고, 발광은 갈래 사이를 지납니다.', 'E'],
     [/^stock insert base/, '순정 인서트 받침', 'SC-10 순정 스프링 클램프 인서트의 받침.', 'E'],
     [/^stock insert holder/, '순정 인서트 홀더', '시료를 뒤로 기울여 세우는 홀더.', 'E'],
     [/^stock insert spring/, '순정 스프링 클램프', '슬라이드 윗단을 누르는 스프링 클램프.', 'E'],
@@ -125,19 +128,23 @@
     [/^pixel electrode/, '화소 전극', '막 위의 금 전극 4개(표시용).', 'A'],
     [/^pixel mask/, '화소 가림판', '화소 4곳만 열어 두는 얇은 검은 판.', 'A'],
     [/^M5 fitting/, 'M5 피팅', '셀 옆면 N2 연결부. Ø4 튜브가 꽂힙니다.', 'A'],
-    [/^lens tube/, '렌즈 튜브 (SM, 검은 아노다이징)', 'Ø16 × 25 mm 튜브에 Ø12.7 렌즈. 페룰 끝의 빛을 시료에서 Ø12 mm 정도로 모읍니다.', 'A'],
+    [/^lens tube white/, '백색 조명 렌즈 튜브 (왼쪽, MCWHL7)', 'Ø16 × 25 mm SM형 튜브. 시료 법선에서 왼쪽(여기 포트 쪽)으로 12°. 백색은 PL 대역(720~820 nm)과 겹쳐서 앞에 단파장 통과 필터가 필요합니다.', 'A'],
+    [/^lens tube 940/, '940 nm 조명 렌즈 튜브 (오른쪽, M940L3)', 'Ø16 × 25 mm SM형 튜브. 시료 법선에서 오른쪽으로 12°. 940 nm는 검출기(R928P, 870 nm까지) 감도 밖이라 영향이 작을 것으로 추정(미확인). Si 아랫셀 PL은 이 검출기로 못 봅니다.', 'A'],
+    [/^short-pass/, '단파장 통과 필터 (백색 튜브 앞)', 'Ø12.7 × 3 mm 원판, 튜브 앞에 끼움. 백색광의 PL 대역 성분을 잘라 냅니다. 치수는 가정.', 'A'],
+    [/^long-pass/, '장파장 통과 필터 (발광 쪽 홀더)', '25 × 25 × 2 mm 노란 유리 판을 발광 쪽 순정 필터 홀더에 꽂은 모습. 조명 빛이 검출기로 들어가는 것을 막습니다. 치수는 가정.', 'A'],
     [/^lens retaining/, '렌즈 고정 링', '튜브 앞쪽 은색 링.', 'A'],
-    [/^lens \(/, '렌즈 Ø12.7', '튜브 앞에서 보이는 렌즈면.', 'A'],
-    [/^SMA ferrule/, '470 nm 광섬유 페룰 (SMA)', 'Ø6 × 20 mm. 시료 앞 60 mm에서 시료면 법선 방향으로 비춥니다.', 'A'],
+    [/^lens (white|940)/, '렌즈 Ø12.7', '튜브 앞에서 보이는 렌즈면.', 'A'],
+    [/^SMA ferrule/, 'SMA 페룰 (Ø6 × 20)', '튜브 뒤에 꽂힌 SMA 페룰. 시료 앞 80 mm 위치에서 시료 중심을 향합니다.', 'A'],
     [/^SMA nut/, 'SMA 너트', '페룰을 튜브에 조이는 너트.', 'A'],
     [/^strain relief/, '피복 보호 고무', '광섬유가 꺾이지 않게 잡아 주는 고무.', 'A'],
-    [/^ferrule arm/, '페룰 팔 (출력)', '셀 윗변에서 앞으로 나온 팔. 조명이 셀과 같이 움직입니다.', 'A'],
-    [/^fibre armoured/, '광섬유 (스테인리스 피복)', 'Ø4 mm 피복, 굽힘 반경 100 mm 이상의 곡선으로 뚜껑까지 갑니다.', 'A'],
+    [/^ferrule arm/, '조명 팔 (출력, 튜브 2개)', '셀 윗변에서 앞으로 나온 팔 하나에 두 튜브를 고정합니다. 조명이 셀과 같이 움직입니다.', 'A'],
+    [/^fibre armoured white/, '광섬유 (백색, 스테인리스 피복)', 'Ø4 mm 피복, 굽힘 반경 100 mm 이상의 곡선으로 뚜껑까지 갑니다.', 'A'],
+    [/^fibre armoured 940/, '광섬유 (940 nm, 스테인리스 피복)', 'Ø4 mm 피복, 굽힘 반경 100 mm 이상의 곡선으로 뚜껑까지 갑니다.', 'A'],
     [/^N2 tube/, 'N2 튜브 Ø4', '셀 피팅에서 뚜껑까지 가는 튜브 두 줄.', 'A'],
     [/^FFC/, 'FFC 케이블 (주황)', '폭 7 mm 리본. 캐리어 기판에서 뚜껑 밖으로 나갑니다.', 'A'],
     [/^feed-through/, '뚜껑 관통 판 100 × 110', '뚜껑 안쪽 판을 이 판으로 바꾸는 안. 광섬유·FFC·N2 튜브가 여기를 지나갑니다.', 'E'],
     [/^N2 bulkhead/, 'N2 벌크헤드', '관통 판의 N2 연결부 Ø10 × 20 mm, 두 개(들어감·나감).', 'A'],
-    [/^fibre gland/, '광섬유 글랜드 (분할)', '광섬유가 뚜껑을 지나는 자리. 20 × 20 × 12 mm.', 'A'],
+    [/^fibre gland/, '광섬유 글랜드 (분할, 2개)', '백색과 940 nm 광섬유가 각각 뚜껑을 지나는 자리. 20 × 20 × 12 mm.', 'A'],
     [/^DB15 seat/, 'DB15 자리', '셀 전기 4선·센서용 커넥터 자리.', 'A'],
     [/^motor connector/, '모터선 커넥터 자리', '수직 축 모터를 쓸 때만 필요한 자리.', 'A'],
     [/^GT2 pulley/, 'GT2 풀리 Ø30', '손잡이에 씌우는 풀리. 모터 구동은 빔타임 뒤 선택 사항.', 'A'],
@@ -147,13 +154,15 @@
     [/^table-edge/, '테이블 가장자리 브래킷 (출력)', '테이블 가장자리를 물어 모터를 받칩니다. 장비에는 나사를 박지 않습니다.', 'A'],
     [/^belt/, 'GT2 벨트', '두 풀리를 감는 띠(표시용).', 'A'],
   ];
-  const ST = { wall: 'solid', lidOpen: true, lidMode: 'A', insert: 'ours', beams: { exc: true, det: true, light: true, spec: true }, lightOn: true, drive: false, vstep: true, explode: 0, explodeGoal: 0 };
+  const ST = { wall: 'solid', lidOpen: true, lidMode: 'A', insert: 'ours', sample: '2T', beams: { exc: true, det: true, w: false, ir: false, spec: true }, lightOn: true, lpf: true, drive: false, vstep: true, explode: 0, explodeGoal: 0 };
   const TOG = [
-    { id: 'exc', label: '여기빔', get: () => ST.beams.exc, set: (v) => { ST.beams.exc = v; } },
+    { id: 'exc', label: 'FS5 여기빔(Xe)', get: () => ST.beams.exc, set: (v) => { ST.beams.exc = v; } },
     { id: 'det', label: '발광(검출)', get: () => ST.beams.det, set: (v) => { ST.beams.det = v; } },
-    { id: 'lbeam', label: '470 nm 조명빔', get: () => ST.beams.light, set: (v) => { ST.beams.light = v; } },
+    { id: 'wbeam', label: '백색 조명빔', get: () => ST.beams.w, set: (v) => { ST.beams.w = v; } },
+    { id: 'irbeam', label: '940 nm 조명빔', get: () => ST.beams.ir, set: (v) => { ST.beams.ir = v; } },
     { id: 'spec', label: '정반사 선', get: () => ST.beams.spec, set: (v) => { ST.beams.spec = v; } },
     { id: 'light', label: '조명 (광섬유·렌즈 튜브)', get: () => ST.lightOn, set: (v) => { ST.lightOn = v; } },
+    { id: 'lpf', label: '장파장 통과 필터(발광 쪽)', get: () => ST.lpf, set: (v) => { ST.lpf = v; } },
     { id: 'drive', label: '바깥 초점 구동 (빔타임 뒤)', get: () => ST.drive, set: (v) => { ST.drive = v; } },
     { id: 'vstep', label: '수직 축 모터 (선택)', get: () => ST.vstep, set: (v) => { ST.vstep = v; } },
   ];
@@ -280,7 +289,8 @@
     const Pe = META.Pe, Pd = META.Pd, O = META.O;
     beams.exc = cone(Pe, O, 10, 3, 0x2f6bff, 0.32);
     beams.det = cone(O, Pd, 2, 10, 0xff3b30, 0.30);
-    beams.light = cone(META.lens_front, O, META.light_r[0], META.light_r[1], 0x5cd0ff, 0.30);
+    beams.w = cone(META.lights.W.front, O, META.light_r[0], META.light_r[1], 0xfff0c8, 0.42);
+    beams.ir = cone(META.lights.IR.front, O, META.light_r[0], META.light_r[1], 0x8a0f0f, 0.45);
     const s = META.spec_dir, L = 200, g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(s[0] * L, s[1] * L, s[2] * L)]);
     const ln = new THREE.Line(g, new THREE.LineDashedMaterial({ color: 0xffb400, dashSize: 6, gapSize: 4 })); ln.computeLineDistances(); world.add(ln); beams.spec = ln;
   }
@@ -290,19 +300,20 @@
   function visibleOf(p) {
     const g = p.g, n = p.name;
     if (g === 'table' || g === 'sc10' || g === 'filter') return true;
+    if (g === 'lpf') return ST.lpf;
     if (WALLG.test(g)) {
       if (ST.wall === 'hide') return false;
       if (g === 'lidA' || g === 'collarA') return ST.lidMode === 'A';
-      if (g === 'lidB') return ST.lidMode === 'B';
+      if (g === 'lidB') return ST.lidMode === 'B' && !(ST.sample === 'single' && /^fibre gland 940/.test(n));
       return true;
     }
     if (g === 'stock') return ST.insert === 'stock';
     if (ST.insert !== 'ours') return false;
     if (g === 'drive') return false;
-    if (g === 'light') return ST.lightOn;
+    if (g === 'light' || g === 'light_W') return ST.lightOn;
+    if (g === 'light_IR') return ST.lightOn && ST.sample === '2T';
     if (g === 'vstep') return ST.vstep;
-    if (g === 'cabA') return ST.lidMode === 'A' && (!/^fibre/.test(n) || ST.lightOn) && ST.explodeGoal < 0.05;
-    if (g === 'cabB') return ST.lidMode === 'B' && (!/^fibre/.test(n) || ST.lightOn) && ST.explodeGoal < 0.05;
+    if (g === 'cabA' || g === 'cabB') { if (ST.lidMode !== (g === 'cabA' ? 'A' : 'B') || ST.explodeGoal >= 0.05) return false; if (/^fibre/.test(n)) return ST.lightOn && (ST.sample === '2T' || !/940/.test(n)); return true; }
     return true;
   }
   function applyState() {
@@ -310,6 +321,7 @@
     for (const p of parts) {
       let v = p.g === 'drive' ? ST.drive : visibleOf(p);
       if (p.g === 'lidB' && ST.lidMode === 'A') v = false;
+      if (p.g === 'lpf') v = ST.lpf;
       p.obj.visible = v;
       const m = p.obj.material, ghost = ST.wall === 'ghost' && WALLG.test(p.g);
       m.transparent = ghost || p.alpha0 < 0.999; m.opacity = ghost ? Math.min(p.alpha0, 0.13) : p.alpha0; m.depthWrite = !ghost && p.alpha0 >= 0.9;
@@ -317,7 +329,8 @@
       if (p.obj.userData.edgeLine) p.obj.userData.edgeLine.visible = !ghost;
     }
     lidShift.position.z = ST.lidMode === 'A' ? META.collar_h : 0;
-    beams.exc.visible = ST.beams.exc; beams.det.visible = ST.beams.det; beams.light.visible = ST.beams.light && ST.insert === 'ours'; beams.spec.visible = ST.beams.spec;
+    beams.exc.visible = ST.beams.exc; beams.det.visible = ST.beams.det; beams.w.visible = ST.beams.w && ST.insert === 'ours'; beams.ir.visible = ST.beams.ir && ST.insert === 'ours' && ST.sample === '2T'; beams.spec.visible = ST.beams.spec && ST.beams.exc;
+    document.querySelectorAll('[data-p]').forEach((b) => b.classList.toggle('on', b.dataset.p === ST.preset)); markSeg('sSam', ST.sample); syncToggles();
     document.getElementById('bExplode').classList.toggle('on', ST.explodeGoal > 0.5); document.getElementById('bLid').classList.toggle('on', ST.lidOpen); document.getElementById('bLid').textContent = ST.lidOpen ? '뚜껑 열림' : '뚜껑 닫힘';
     markSeg('sIns', ST.insert); markSeg('sLid', ST.lidMode); markSeg('sWall', ST.wall); dirty = true;
   }
@@ -331,7 +344,9 @@
   }
   function syncToggles() { for (const t of TOG) { const cb = document.querySelector('#toggles input[data-t="' + t.id + '"]'); if (cb) cb.checked = t.get(); } }
   const segHandler = (id, fn) => document.getElementById(id).addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { fn(b.dataset.v); applyState(); } });
-  segHandler('sWall', (v) => { ST.wall = v; }); segHandler('sIns', (v) => { ST.insert = v; if (v === 'stock') ST.explodeGoal = 0; }); segHandler('sLid', (v) => { ST.lidMode = v; });
+  segHandler('sWall', (v) => { ST.wall = v; }); segHandler('sIns', (v) => { ST.insert = v; if (v === 'stock') ST.explodeGoal = 0; }); segHandler('sLid', (v) => { ST.lidMode = v; }); segHandler('sSam', (v) => { ST.sample = v; if (v === 'single') ST.beams.ir = false; });
+  const PRESETS_BEAM = { before: { exc: true, det: true, w: false, ir: false }, during: { exc: false, det: true, w: true, ir: true }, after: { exc: true, det: true, w: false, ir: false } };
+  document.querySelectorAll('[data-p]').forEach((b) => b.addEventListener('click', () => { const q = PRESETS_BEAM[b.dataset.p]; ST.preset = b.dataset.p; ST.beams.exc = q.exc; ST.beams.det = q.det; ST.beams.w = q.w; ST.beams.ir = q.ir && ST.sample === '2T'; if (q.w || q.ir) { ST.insert = 'ours'; ST.lightOn = true; } applyState(); }));
   document.getElementById('bLid').addEventListener('click', () => { ST.lidOpen = !ST.lidOpen; applyState(); });
   document.getElementById('bExplode').addEventListener('click', () => {
     ST.explodeGoal = ST.explodeGoal > 0.5 ? 0 : 1; if (ST.explodeGoal > 0.5) { ST.insert = 'ours'; setView('explode', false); }
@@ -355,6 +370,8 @@
   function applyQuery() {
     const q = new URLSearchParams(location.search);                                         // test hooks: ?view=insert&sel=cell body&wall=ghost&ins=stock&lid=B&open=0&explode=1&drive=1
     if (q.get('wall')) ST.wall = q.get('wall'); if (q.get('ins')) ST.insert = q.get('ins'); if (q.get('lid')) ST.lidMode = q.get('lid');
+    if (q.get('sample') === 'single') { ST.sample = 'single'; ST.beams.ir = false; }
+    if (q.get('preset') && PRESETS_BEAM[q.get('preset')]) { const pp = PRESETS_BEAM[q.get('preset')]; ST.preset = q.get('preset'); ST.beams.exc = pp.exc; ST.beams.det = pp.det; ST.beams.w = pp.w; ST.beams.ir = pp.ir && ST.sample === '2T'; }
     if (q.get('open') === '0') { ST.lidOpen = false; lidAng = 0; } if (q.get('drive') === '1') ST.drive = true; if (q.get('explode') === '1') { ST.explodeGoal = 1; ST.explode = 1; applyExplode(); }
     syncToggles(); applyState();
     if (q.get('explode') === '1' && !q.get('view')) setView('explode', true);
