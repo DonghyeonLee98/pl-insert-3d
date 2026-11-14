@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>FS5 SC-10 안 N2 셀 인서트 배치 v5</title>
+<style>
+  :root { --bg:#eef0f3; --ink:#1d2430; --line:#cfd5de; --acc:#1f3b63; --m:#1a8f3c; --e:#c47f00; --a:#6b7280; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",Arial,sans-serif; -webkit-text-size-adjust:100%; }
+  body { display:flex; flex-direction:column; height:100dvh; overflow:hidden; }
+  h1 { margin:0; padding:7px 10px; font-size:14px; line-height:1.3; font-weight:700; background:var(--acc); color:#fff; }
+  #stage { position:relative; flex:1 1 52dvh; min-height:52dvh; background:radial-gradient(ellipse at 50% 35%, #ffffff 0%, #e9edf2 55%, #cfd6df 100%); touch-action:none; }
+  #stage canvas { display:block; width:100%; height:100%; touch-action:none; }
+  #status { position:absolute; left:8px; top:6px; font-size:12px; color:#555; background:rgba(255,255,255,.8); padding:2px 6px; border-radius:4px; }
+  #panel { flex:0 1 auto; max-height:46dvh; overflow-y:auto; padding:6px 8px 8px; border-top:1px solid var(--line); background:var(--bg); }
+  .row { display:flex; flex-wrap:wrap; gap:5px; margin:0 0 6px; align-items:center; }
+  .row .lab { font-size:12px; color:#555; margin-right:2px; }
+  button { padding:6px 9px; font-size:13px; border:1px solid var(--acc); background:#fff; color:var(--acc); border-radius:6px; font-family:inherit; }
+  button.on { background:var(--acc); color:#fff; }
+  .views button { flex:1 1 0; min-width:68px; }
+  .seg { display:flex; } .seg button { border-radius:0; margin-left:-1px; } .seg button:first-child { border-radius:6px 0 0 6px; margin-left:0; } .seg button:last-child { border-radius:0 6px 6px 0; }
+  .chip { display:flex; align-items:center; gap:4px; padding:4px 8px; font-size:12.5px; border:1px solid var(--line); border-radius:14px; background:#fff; user-select:none; }
+  .chip input { margin:0; width:15px; height:15px; }
+  #info { border:1px solid var(--line); border-radius:6px; background:#fff; padding:6px 8px; font-size:13px; line-height:1.45; min-height:58px; margin:0 0 4px; }
+  #info b { font-size:14px; }
+  .tag { display:inline-block; padding:0 6px; border-radius:9px; font-size:11.5px; color:#fff; margin-left:4px; }
+  .tag.M { background:var(--m); } .tag.E { background:var(--e); } .tag.A { background:var(--a); }
+  #foot { margin:6px 0 0; padding:0; font-size:11.5px; line-height:1.45; color:#444; list-style:none; }
+  #foot li { padding-left:10px; text-indent:-10px; } #foot li::before { content:"· "; }
+  @media (min-width: 820px) {
+    body { display:grid; grid-template-columns: 1fr 370px; grid-template-rows: auto minmax(0, 1fr); }
+    h1 { grid-column: 1 / -1; font-size:16px; }
+    #stage { min-height:0; flex:none; }
+    #panel { max-height:none; border-top:0; border-left:1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<h1>FS5 SC-10 안 N2 셀 인서트 배치 v5 (러프, 2026-11-14)</h1>
+<div id="stage"><div id="status">모델을 읽는 중…</div></div>
+<div id="panel">
+  <div class="row views" id="views">
+    <button data-v="all" class="on">전체</button><button data-v="top">위에서</button><button data-v="side">옆에서</button><button data-v="insert">인서트 확대</button>
+  </div>
+  <div class="row">
+    <button id="bExplode">분해 보기</button><button id="bLid" class="on">뚜껑 열림</button>
+    <span class="lab">벽</span><span class="seg" id="sWall"><button data-v="solid" class="on">불투명</button><button data-v="ghost">반투명</button><button data-v="hide">숨김</button></span>
+  </div>
+  <div class="row">
+    <span class="lab">인서트</span><span class="seg" id="sIns"><button data-v="stock">순정</button><button data-v="ours" class="on">우리 N2 셀</button></span>
+    <span class="lab">뚜껑 안</span><span class="seg" id="sLid"><button data-v="A" class="on">(A) 덧테</button><button data-v="B">(B) 관통 판</button></span>
+  </div>
+  <div class="row" id="toggles"></div>
+  <div id="info"><b>부품을 눌러 보세요</b><br>누르면 이름, 한 줄 설명, 치수 출처(자 사진 / 사진 추정 / 가정)가 여기에 나옵니다.</div>
+  <ul id="foot">
+    <li>벽 윗변까지 깊이 230 mm와 빔 높이 40 mm는 자 사진의 원근에서 추정한 값입니다 (범위 200~260 mm, 32~48 mm).</li>
+    <li>안쪽 폭 187 mm, 길이 300 mm, 받침판 72 mm는 자 사진에서 읽은 값입니다 (오차 약 ±10 %).</li>
+    <li>시료 기울기 20°, 인서트 고정 나사(M3, 간격 20 mm), 셀·광섬유·덧테·관통 판 치수는 가정입니다. 겉모양은 사진을 보고 단순화했습니다.</li>
+    <li>검토용 러프 배치이며 제작 도면이 아닙니다. 한 손가락으로 돌리고, 두 손가락으로 확대하거나 옮깁니다.</li>
+  </ul>
+</div>
+<script src="three_core.js"></script>
+<script src="gltf_loader.js"></script>
+<script src="pl_v5_model.js"></script>
+<script>
+(function () {
+  'use strict';
+  const M = '자 사진에서 읽음', E = '사진 추정', A = '가정', SRC = { M: M, E: E, A: A };
+  const DEBUG = /debug/.test(location.search);
+  // [name regex, Korean name, one-line description, source]
+  const INFO = [
+    [/^floor/, '카세트 바닥', '검은 무광 바닥. 안쪽 폭 187 × 길이 300 mm (자로 잰 값).', 'M'],
+    [/^wall front/, '앞벽 (낮음)', '옆벽의 약 40 %(70 mm). 가운데에 봉이 지나는 구멍 Ø12, 위에 손잡이 턱이 있습니다.', 'A'],
+    [/^wall back/, '뒷벽 (뚜껑 경첩 쪽)', '시료는 이 벽에서 약 90 mm 앞에 있습니다 (자 사진).', 'M'],
+    [/^wall left/, '왼쪽 벽 (여기광 쪽)', '안쪽 폭 187 mm는 자로 잰 값, 벽은 수직입니다. 높이 230 mm는 사진 추정.', 'M'],
+    [/^wall right/, '오른쪽 벽 (검출 쪽)', '안쪽 폭 187 mm는 자로 잰 값. 높이 230 mm는 사진 추정.', 'M'],
+    [/^casing/, '바깥 껍데기 (둥근 옆면)', '카세트 양옆을 감싸는 장비 몸체. 앞쪽 끝이 둥급니다. 두께는 가정.', 'A'],
+    [/^rim magnet/, '테두리 은색 부품', '윗 테두리 좌우의 은색 둥근 부품(뚜껑 자석 자리로 보임).', 'E'],
+    [/^hinge/, '뚜껑 경첩', '뒤쪽 위 모서리의 경첩.', 'E'],
+    [/^front handle ledge/, '앞 손잡이 턱', '앞벽 위에서 카세트를 잡아 당기는 턱.', 'E'],
+    [/^name plate/, '명판 자리 (SC-10)', '앞판 바깥면의 금색 명판.', 'E'],
+    [/^port window/, '포트 창 (타원)', '옆벽의 타원 창. 시료에서 앞쪽 약 92 mm, 중심선과 45°. 위치는 사진 추정(95~110), 모양은 단순화.', 'E'],
+    [/^port bezel/, '포트 창 테두리', '창을 두르는 검은 테두리.', 'E'],
+    [/^baffle fold/, '차광판 접힌 부분', '차광판 끝을 꺾은 면.', 'E'],
+    [/^baffle/, '차광판', '포트 창 앞에 비스듬히 선 판(약 60 × 70 mm). 사진 8430·8431에서 따왔습니다.', 'E'],
+    [/^table/, '테이블 (참고)', '카세트가 놓인 테이블. 카세트 앞쪽이 테이블 가장자리 밖으로 20 mm 나온 것으로 봤습니다.', 'A'],
+    [/^lid plate \(A\)/, '뚜껑 (경첩은 뒤쪽)', '맨 위를 덮는 판. 덧테를 쓰면 12 mm 올라앉습니다. 열린 각 100°는 가정.', 'E'],
+    [/^lid plate \(B/, '뚜껑 (관통 판 안)', '가운데가 뚫려 관통 판이 들어가는 뚜껑.', 'E'],
+    [/^lid front skirt/, '뚜껑 앞 가림판', '낮은 앞벽 위의 틈을 막는 판.', 'A'],
+    [/^lid inner plate screw/, '뚜껑 안 판 나사', '뚜껑 안쪽 판을 고정하는 나사 2개 (사진).', 'E'],
+    [/^lid inner plate/, '뚜껑 안쪽 판 (순정)', '사진에서 뚜껑 안쪽에 나사 2개로 붙어 있는 약 100 × 110 mm 판.', 'E'],
+    [/^collar/, '덧테 (출력, 높이 12 mm)', '윗 테두리에 얹는 검은 틀. 오른쪽에 광섬유·N2 튜브·FFC가 나가는 홈 4개.', 'A'],
+    [/^SC-10 base/, 'SC-10 받침판', '약 72 mm 정사각 (자 사진). 두께 6 mm는 가정, 모서리 나사 4개.', 'M'],
+    [/^base plate screw/, '받침판 나사', '받침판 모서리 나사.', 'E'],
+    [/^SC-10 stage/, 'SC-10 스테이지 (가이드)', '초점 방향(앞뒤)으로 가는 25 mm 직선 스테이지. 크기 40 × 72 × 6 mm는 가정.', 'A'],
+    [/^guide rail/, '가이드 레일', '스테이지 옆면의 은색 레일 표시.', 'A'],
+    [/^carriage screw/, '캐리지 나사', '캐리지 윗면 나사.', 'E'],
+    [/^carriage/, '캐리지 (±12.5 mm 이동)', '스테이지 위에서 앞뒤로 움직이는 판. 인서트가 이 위에 섭니다.', 'A'],
+    [/^flex coupling/, '유연 커플링', '은색 커플링. 길이 23 mm는 자 사진, 지름 16 mm와 홈 모양은 단순화.', 'M'],
+    [/^coupling set screw/, '커플링 조임 나사', '커플링 위 작은 나사.', 'E'],
+    [/^rod/, '봉 Ø8', '커플링에서 앞벽을 지나 밖으로 나가는 검은 봉. 카세트 안 길이 약 150 mm는 자 사진.', 'M'],
+    [/^knob/, '봉 끝 손잡이', '앞판 밖에서 손으로 돌려 초점을 맞추는 작은 손잡이 Ø28 × 12 mm (널링은 생략).', 'A'],
+    [/^filter fork tips/, '필터 홀더 끝단 (은색)', '필터를 잡는 갈래 끝의 은색 부분.', 'E'],
+    [/^filter fork \(excitation/, '필터 홀더 (여기 쪽, 왼쪽)', '받침판 앞쪽 모서리, 중심선에서 −45° 방향으로 선 갈래 모양 홀더. 빔은 두 갈래 사이를 지납니다.', 'E'],
+    [/^filter fork/, '필터 홀더 (발광 쪽, 오른쪽)', '받침판 앞쪽 모서리, +45° 방향 갈래 모양 홀더. 빔은 두 갈래 사이를 지납니다.', 'E'],
+    [/^stock insert base/, '순정 인서트 받침', 'SC-10 순정 스프링 클램프 인서트의 받침.', 'E'],
+    [/^stock insert holder/, '순정 인서트 홀더', '시료를 뒤로 기울여 세우는 홀더.', 'E'],
+    [/^stock insert spring/, '순정 스프링 클램프', '슬라이드 윗단을 누르는 스프링 클램프.', 'E'],
+    [/^stock insert side/, '순정 옆 클램프', '슬라이드 옆을 잡는 작은 클램프.', 'E'],
+    [/^stock insert quartz/, '석영 슬라이드 (순정)', '순정 인서트에 끼우는 45 × 12 mm 석영 슬라이드.', 'E'],
+    [/^insert cradle/, '인서트 틀 (출력)', '순정 인서트 자리에 끼우는 N2 셀 틀: 양옆 레일 + 뒷판. 캐리지 위에 M3 나사 2개로 고정.', 'A'],
+    [/^M3 screw/, 'M3 고정 나사', '틀을 캐리지에 고정하는 나사. 간격 20 mm, 홈으로 좌우 ±4 mm 옮겨 끼울 수 있습니다.', 'A'],
+    [/^w stepper/, '수직 축 스텝모터 (선택)', '셀을 시료면 안에서 위아래로 움직이는 소형 모터 20 × 20 × 30 mm.', 'A'],
+    [/^detent mark/, '수직 3단 눈금', '손으로 −5 / 0 / +5 mm에 맞추는 홈 표시.', 'A'],
+    [/^cell body/, 'N2 셀 몸체 (POM)', '40 × 52 × 8 mm 검은 몸체. 시료면은 앞쪽을 보고 뒤로 20° 기울어 서 있습니다.', 'A'],
+    [/^gasket/, '가스켓', '유리 창 뒤 고무 링. 가스가 새지 않게 막습니다.', 'A'],
+    [/^window glass/, '유리 창', '두 빔이 지나는 유리 창 34 × 36 × 1.5 mm.', 'A'],
+    [/^window frame/, '창틀 (창 30 × 32)', '알루미늄 창틀 40 × 52 × 3 mm.', 'A'],
+    [/^frame screw/, '창틀 나사', '창틀 모서리 나사.', 'A'],
+    [/^carrier PCB/, '캐리어 기판 (초록 PCB)', '시료를 얹고 전극을 빼내는 기판 30 mm 폭. 위로 나온 부분이 FFC 자리.', 'A'],
+    [/^carrier gold pad/, '금색 패드', '기판 위쪽의 접점 패드 8개.', 'A'],
+    [/^sample glass/, '시료 유리 25 × 25', '시료 기판. 앞면이 측정점(원점)에 옵니다.', 'A'],
+    [/^perovskite film/, '페로브스카이트 막', '어두운 갈색 막.', 'A'],
+    [/^pixel electrode/, '화소 전극', '막 위의 금 전극 4개(표시용).', 'A'],
+    [/^pixel mask/, '화소 가림판', '화소 4곳만 열어 두는 얇은 검은 판.', 'A'],
+    [/^M5 fitting/, 'M5 피팅', '셀 옆면 N2 연결부. Ø4 튜브가 꽂힙니다.', 'A'],
+    [/^lens tube/, '렌즈 튜브 (SM, 검은 아노다이징)', 'Ø16 × 25 mm 튜브에 Ø12.7 렌즈. 페룰 끝의 빛을 시료에서 Ø12 mm 정도로 모읍니다.', 'A'],
+    [/^lens retaining/, '렌즈 고정 링', '튜브 앞쪽 은색 링.', 'A'],
+    [/^lens \(/, '렌즈 Ø12.7', '튜브 앞에서 보이는 렌즈면.', 'A'],
+    [/^SMA ferrule/, '470 nm 광섬유 페룰 (SMA)', 'Ø6 × 20 mm. 시료 앞 60 mm에서 시료면 법선 방향으로 비춥니다.', 'A'],
+    [/^SMA nut/, 'SMA 너트', '페룰을 튜브에 조이는 너트.', 'A'],
+    [/^strain relief/, '피복 보호 고무', '광섬유가 꺾이지 않게 잡아 주는 고무.', 'A'],
+    [/^ferrule arm/, '페룰 팔 (출력)', '셀 윗변에서 앞으로 나온 팔. 조명이 셀과 같이 움직입니다.', 'A'],
+    [/^fibre armoured/, '광섬유 (스테인리스 피복)', 'Ø4 mm 피복, 굽힘 반경 100 mm 이상의 곡선으로 뚜껑까지 갑니다.', 'A'],
+    [/^N2 tube/, 'N2 튜브 Ø4', '셀 피팅에서 뚜껑까지 가는 튜브 두 줄.', 'A'],
+    [/^FFC/, 'FFC 케이블 (주황)', '폭 7 mm 리본. 캐리어 기판에서 뚜껑 밖으로 나갑니다.', 'A'],
+    [/^feed-through/, '뚜껑 관통 판 100 × 110', '뚜껑 안쪽 판을 이 판으로 바꾸는 안. 광섬유·FFC·N2 튜브가 여기를 지나갑니다.', 'E'],
+    [/^N2 bulkhead/, 'N2 벌크헤드', '관통 판의 N2 연결부 Ø10 × 20 mm, 두 개(들어감·나감).', 'A'],
+    [/^fibre gland/, '광섬유 글랜드 (분할)', '광섬유가 뚜껑을 지나는 자리. 20 × 20 × 12 mm.', 'A'],
+    [/^DB15 seat/, 'DB15 자리', '셀 전기 4선·센서용 커넥터 자리.', 'A'],
+    [/^motor connector/, '모터선 커넥터 자리', '수직 축 모터를 쓸 때만 필요한 자리.', 'A'],
+    [/^GT2 pulley/, 'GT2 풀리 Ø30', '손잡이에 씌우는 풀리. 모터 구동은 빔타임 뒤 선택 사항.', 'A'],
+    [/^motor pulley/, '모터 풀리 Ø12', '스텝모터 축에 끼우는 작은 풀리.', 'A'],
+    [/^motor shaft/, '모터 축 Ø5', '스텝모터 축.', 'A'],
+    [/^NEMA17/, 'NEMA17 스텝모터', '초점 축을 돌리는 모터 42 × 42 × 40 mm (바깥, 선택).', 'A'],
+    [/^table-edge/, '테이블 가장자리 브래킷 (출력)', '테이블 가장자리를 물어 모터를 받칩니다. 장비에는 나사를 박지 않습니다.', 'A'],
+    [/^belt/, 'GT2 벨트', '두 풀리를 감는 띠(표시용).', 'A'],
+  ];
+  const ST = { wall: 'solid', lidOpen: true, lidMode: 'A', insert: 'ours', beams: { exc: true, det: true, light: true, spec: true }, lightOn: true, drive: false, vstep: true, explode: 0, explodeGoal: 0 };
+  const TOG = [
+    { id: 'exc', label: '여기빔', get: () => ST.beams.exc, set: (v) => { ST.beams.exc = v; } },
+    { id: 'det', label: '발광(검출)', get: () => ST.beams.det, set: (v) => { ST.beams.det = v; } },
+    { id: 'lbeam', label: '470 nm 조명빔', get: () => ST.beams.light, set: (v) => { ST.beams.light = v; } },
+    { id: 'spec', label: '정반사 선', get: () => ST.beams.spec, set: (v) => { ST.beams.spec = v; } },
+    { id: 'light', label: '조명 (광섬유·렌즈 튜브)', get: () => ST.lightOn, set: (v) => { ST.lightOn = v; } },
+    { id: 'drive', label: '바깥 초점 구동 (빔타임 뒤)', get: () => ST.drive, set: (v) => { ST.drive = v; } },
+    { id: 'vstep', label: '수직 축 모터 (선택)', get: () => ST.vstep, set: (v) => { ST.vstep = v; } },
+  ];
+  // explode offsets along the sample normal (mm, + = towards the front)
+  const EXPL = [[/^window frame|^frame screw/, 48], [/^window glass/, 36], [/^gasket/, 25], [/^pixel mask/, 15], [/^pixel electrode/, 10], [/^perovskite film/, 6], [/^sample glass/, 3],
+    [/^carrier/, -8], [/^cell body/, -20], [/^M5 fitting/, -20], [/^insert cradle|^M3 screw|^detent|^w stepper/, -44]];
+  const stage = document.getElementById('stage'), status = document.getElementById('status'), info = document.getElementById('info');
+  const META = window.PL_META;
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding; renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  stage.appendChild(renderer.domElement);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(35, 1, 5, 6000);
+  // soft studio environment for the metal parts (drawn on a canvas, no external file)
+  (function env() {
+    const c = document.createElement('canvas'); c.width = 512; c.height = 256; const g = c.getContext('2d');
+    const gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.45, '#dfe5ee'); gr.addColorStop(0.55, '#9aa3b0'); gr.addColorStop(1, '#5d6470');
+    g.fillStyle = gr; g.fillRect(0, 0, 512, 256); g.fillStyle = 'rgba(255,255,255,.95)'; g.fillRect(60, 30, 110, 40); g.fillRect(330, 20, 130, 50); g.fillStyle = 'rgba(40,46,56,.7)'; g.fillRect(230, 100, 40, 60);
+    const t = new THREE.CanvasTexture(c); t.mapping = THREE.EquirectangularReflectionMapping; t.encoding = THREE.sRGBEncoding;
+    const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromEquirectangular(t).texture; t.dispose(); pm.dispose();
+  })();
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8f99, 0.55));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.05); sun.position.set(-220, 520, 380); sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048); sun.shadow.camera.left = -420; sun.shadow.camera.right = 420; sun.shadow.camera.top = 420; sun.shadow.camera.bottom = -420; sun.shadow.camera.near = 50; sun.shadow.camera.far = 1600;
+  sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.6; scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xdfe8ff, 0.35); fill.position.set(300, 200, -250); scene.add(fill);
+  const world = new THREE.Group(); world.rotation.x = -Math.PI / 2; scene.add(world);          // CAD: Z up, front = -Y  ->  three: Y up, front toward the viewer
+  const lidShift = new THREE.Group(); world.add(lidShift);
+  const lidPivot = new THREE.Group(); lidPivot.position.set(0, META.lid_hinge.y, META.lid_hinge.z); lidShift.add(lidPivot);
+  const NVc = new THREE.Vector3().fromArray(META.NV);
+
+  // ---- orbit (three frame, Y up)
+  const orb = { target: new THREE.Vector3(), az: 0.6, pol: 1.0, r: 800 }, goal = { target: new THREE.Vector3(), az: 0.6, pol: 1.0, r: 800 };
+  const cad = (x, y, z) => new THREE.Vector3(x, z, -y);
+  const fit = () => Math.max(1, 1.25 / (camera.aspect || 1));
+  const PRESETS = {
+    all: () => ({ target: cad(0, -40, 40), az: 0.42, pol: 0.62, r: 900 * fit(), wall: 'solid' }),
+    top: () => ({ target: cad(0, -50, 0), az: 0.0, pol: 0.001, r: 760 * fit(), wall: 'solid' }),
+    side: () => ({ target: cad(0, -50, 70), az: -Math.PI / 2, pol: Math.PI / 2, r: 860 * fit(), wall: 'ghost' }),
+    insert: () => ({ target: cad(0, -20, 5), az: 0.55, pol: 1.05, r: 300 * fit(), wall: 'ghost' }),
+    explode: () => ({ target: cad(0, -30, 5), az: 1.45, pol: 1.3, r: 330 * fit(), wall: 'ghost' }),
+  };
+  const finite = (v) => isFinite(v) && !isNaN(v);
+  let dirty = true;
+  function setView(name, instant) {
+    const p = PRESETS[name](); goal.target.copy(p.target); goal.az = p.az; goal.pol = p.pol; goal.r = p.r;
+    if (p.wall && !(name === 'all' && ST.wall !== 'solid' && false)) { ST.wall = p.wall; markSeg('sWall', ST.wall); applyState(); }
+    if (instant) { orb.target.copy(goal.target); orb.az = goal.az; orb.pol = goal.pol; orb.r = goal.r; }
+    document.querySelectorAll('#views button').forEach((b) => b.classList.toggle('on', b.dataset.v === name)); dirty = true;
+  }
+  function placeCamera() {
+    if (![orb.az, orb.pol, orb.r, orb.target.x, orb.target.y, orb.target.z].every(finite)) setView('all', true);          // guard against NaN after a hidden tab
+    orb.pol = Math.min(Math.max(orb.pol, 0.001), Math.PI - 0.001); orb.r = Math.min(Math.max(orb.r, 60), 3500);
+    const s = Math.sin(orb.pol);
+    camera.position.set(orb.target.x + orb.r * s * Math.sin(orb.az), orb.target.y + orb.r * Math.cos(orb.pol), orb.target.z + orb.r * s * Math.cos(orb.az));
+    camera.up.set(0, 1, 0); camera.lookAt(orb.target);
+  }
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight; if (!(w > 20 && h > 20)) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); dirty = true;
+  }
+  window.addEventListener('resize', resize); if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+  const ptrs = new Map(); let lastPinch = 0, lastMid = null, moved = 0;
+  const el = renderer.domElement;
+  el.addEventListener('pointerdown', (e) => { el.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); moved = 0; if (ptrs.size === 2) { lastPinch = 0; lastMid = null; } });
+  el.addEventListener('pointermove', (e) => {
+    const p = ptrs.get(e.pointerId); if (!p) return;
+    const dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY; moved += Math.abs(dx) + Math.abs(dy);
+    if (ptrs.size === 1) { goal.az -= dx * 0.008; goal.pol = Math.min(Math.max(goal.pol - dy * 0.008, 0.001), Math.PI - 0.001); }
+    else if (ptrs.size === 2) {
+      const a = [...ptrs.values()]; const d = Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y); const mid = { x: (a[0].x + a[1].x) / 2, y: (a[0].y + a[1].y) / 2 };
+      if (lastPinch > 0 && d > 0) goal.r = Math.min(Math.max(goal.r * lastPinch / d, 60), 3500);
+      if (lastMid) panBy(mid.x - lastMid.x, mid.y - lastMid.y);
+      lastPinch = d; lastMid = mid;
+    }
+    dirty = true;
+  });
+  function panBy(dx, dy) { const k = goal.r * 0.0018; const r = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0), u = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 1); goal.target.addScaledVector(r, -dx * k).addScaledVector(u, dy * k); orb.target.copy(goal.target); }
+  const endPtr = (e) => { const one = ptrs.size === 1; ptrs.delete(e.pointerId); lastPinch = 0; lastMid = null; if (one && moved < 6 && e.type === 'pointerup') pick(e.clientX, e.clientY); };
+  el.addEventListener('pointerup', endPtr); el.addEventListener('pointercancel', endPtr);
+  el.addEventListener('wheel', (e) => { e.preventDefault(); goal.r = Math.min(Math.max(goal.r * Math.exp(e.deltaY * 0.0012), 60), 3500); dirty = true; }, { passive: false });
+
+  // ---- model
+  const parts = [];                                                                     // {obj, name, kind, g, alpha0, lid}
+  const lookup = (n) => { for (const r of INFO) if (r[0].test(n)) return r; return null; };
+  const partName = (o) => (o.userData && o.userData.name) || o.name.replace(/_/g, ' ');
+  const NOEDGE = /^(tube|ffc|fibre_steel|glass|sample_glass|gasket|film)$/;
+  function load() {
+    const bin = atob(window.PL_GLB); const buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    new THREE.GLTFLoader().parse(buf.buffer, '', (gltf) => {
+      const meshes = []; gltf.scene.traverse((o) => { if (o.isMesh) meshes.push(o); });
+      for (const o of meshes) {
+        const name = partName(o), mp = META.parts[name] || { k: 'casing', g: 'walls' }, kd = META.kinds[mp.k] || META.kinds.casing;
+        o.geometry.deleteAttribute('color'); o.geometry.computeVertexNormals();
+        const col = new THREE.Color(kd.c[0], kd.c[1], kd.c[2]).convertSRGBToLinear();
+        const mat = new THREE.MeshStandardMaterial({ color: col, metalness: kd.m, roughness: kd.r, transparent: kd.a < 0.999, opacity: kd.a, side: kd.a < 0.999 ? THREE.DoubleSide : THREE.FrontSide, envMapIntensity: 0.9 });
+        mat.depthWrite = kd.a >= 0.9; o.material = mat; o.renderOrder = kd.a < 0.999 ? 2 : 0;
+        o.castShadow = kd.a >= 0.9 && mp.g !== 'table'; o.receiveShadow = true;
+        if (!NOEDGE.test(mp.k) && o.geometry.attributes.position.count < 9000) {
+          const eg = new THREE.EdgesGeometry(o.geometry, 38); const lum = 0.3 * kd.c[0] + 0.59 * kd.c[1] + 0.11 * kd.c[2];
+          const ec = lum < 0.18 ? new THREE.Color(0x3a4150) : new THREE.Color(kd.c[0] * 0.45, kd.c[1] * 0.45, kd.c[2] * 0.45).convertSRGBToLinear();
+          const ln = new THREE.LineSegments(eg, new THREE.LineBasicMaterial({ color: ec, transparent: true, opacity: lum < 0.18 ? 0.55 : 0.5 })); ln.userData.edge = true; o.add(ln); o.userData.edgeLine = ln;
+        }
+        const lid = /^(lid|lidA|lidB)$/.test(mp.g);
+        parts.push({ obj: o, name: name, kind: mp.k, g: mp.g, alpha0: kd.a, lid: lid, base: o.position.clone() });
+      }
+      world.add(gltf.scene); lidPivot.rotation.x = 0; scene.updateMatrixWorld(true);                       // attach the lid parts to the hinge while it is not rotated
+      for (const p of parts) if (p.lid) lidPivot.attach(p.obj);                          // the lid parts hang on the hinge
+      buildBeams(); buildToggles(); applyState(); status.hidden = !DEBUG; resize(); setView('all', true); applyQuery(); dirty = true;
+    }, (err) => { status.textContent = '모델을 읽지 못했습니다'; console.error(err); });
+  }
+
+  // ---- beams (cones from META, CAD coordinates)
+  const beams = {};
+  function cone(a, b, r0, r1, color, op) {
+    const A = new THREE.Vector3().fromArray(a), B = new THREE.Vector3().fromArray(b), d = B.clone().sub(A), L = d.length();
+    const g = new THREE.CylinderGeometry(r1, r0, L, 36, 1, true);                                  // top = B end (radius r1), bottom = A end (radius r0)
+    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: op, depthWrite: false, side: THREE.DoubleSide }));
+    m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.clone().normalize()); m.position.copy(A.add(B).multiplyScalar(0.5)); m.renderOrder = 3; world.add(m); return m;
+  }
+  function buildBeams() {
+    const Pe = META.Pe, Pd = META.Pd, O = META.O;
+    beams.exc = cone(Pe, O, 10, 3, 0x2f6bff, 0.32);
+    beams.det = cone(O, Pd, 2, 10, 0xff3b30, 0.30);
+    beams.light = cone(META.lens_front, O, META.light_r[0], META.light_r[1], 0x5cd0ff, 0.30);
+    const s = META.spec_dir, L = 200, g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(s[0] * L, s[1] * L, s[2] * L)]);
+    const ln = new THREE.Line(g, new THREE.LineDashedMaterial({ color: 0xffb400, dashSize: 6, gapSize: 4 })); ln.computeLineDistances(); world.add(ln); beams.spec = ln;
+  }
+
+  // ---- state -> scene
+  const WALLG = /^(walls|lid|lidA|lidB|collarA)$/;
+  function visibleOf(p) {
+    const g = p.g, n = p.name;
+    if (g === 'table' || g === 'sc10' || g === 'filter') return true;
+    if (WALLG.test(g)) {
+      if (ST.wall === 'hide') return false;
+      if (g === 'lidA' || g === 'collarA') return ST.lidMode === 'A';
+      if (g === 'lidB') return ST.lidMode === 'B';
+      return true;
+    }
+    if (g === 'stock') return ST.insert === 'stock';
+    if (ST.insert !== 'ours') return false;
+    if (g === 'drive') return false;
+    if (g === 'light') return ST.lightOn;
+    if (g === 'vstep') return ST.vstep;
+    if (g === 'cabA') return ST.lidMode === 'A' && (!/^fibre/.test(n) || ST.lightOn) && ST.explodeGoal < 0.05;
+    if (g === 'cabB') return ST.lidMode === 'B' && (!/^fibre/.test(n) || ST.lightOn) && ST.explodeGoal < 0.05;
+    return true;
+  }
+  function applyState() {
+    if (!beams.exc) return;                                                              // model not loaded yet
+    for (const p of parts) {
+      let v = p.g === 'drive' ? ST.drive : visibleOf(p);
+      if (p.g === 'lidB' && ST.lidMode === 'A') v = false;
+      p.obj.visible = v;
+      const m = p.obj.material, ghost = ST.wall === 'ghost' && WALLG.test(p.g);
+      m.transparent = ghost || p.alpha0 < 0.999; m.opacity = ghost ? Math.min(p.alpha0, 0.13) : p.alpha0; m.depthWrite = !ghost && p.alpha0 >= 0.9;
+      p.obj.castShadow = !ghost && p.alpha0 >= 0.9 && p.g !== 'table'; p.obj.renderOrder = m.transparent ? 2 : 0;
+      if (p.obj.userData.edgeLine) p.obj.userData.edgeLine.visible = !ghost;
+    }
+    lidShift.position.z = ST.lidMode === 'A' ? META.collar_h : 0;
+    beams.exc.visible = ST.beams.exc; beams.det.visible = ST.beams.det; beams.light.visible = ST.beams.light && ST.insert === 'ours'; beams.spec.visible = ST.beams.spec;
+    document.getElementById('bExplode').classList.toggle('on', ST.explodeGoal > 0.5); document.getElementById('bLid').classList.toggle('on', ST.lidOpen); document.getElementById('bLid').textContent = ST.lidOpen ? '뚜껑 열림' : '뚜껑 닫힘';
+    markSeg('sIns', ST.insert); markSeg('sLid', ST.lidMode); markSeg('sWall', ST.wall); dirty = true;
+  }
+  function markSeg(id, v) { document.querySelectorAll('#' + id + ' button').forEach((b) => b.classList.toggle('on', b.dataset.v === v)); }
+  function buildToggles() {
+    const box = document.getElementById('toggles');
+    for (const t of TOG) {
+      const lab = document.createElement('label'); lab.className = 'chip'; const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = t.get(); cb.dataset.t = t.id;
+      cb.addEventListener('change', () => { t.set(cb.checked); applyState(); }); lab.appendChild(cb); lab.appendChild(document.createTextNode(t.label)); box.appendChild(lab);
+    }
+  }
+  function syncToggles() { for (const t of TOG) { const cb = document.querySelector('#toggles input[data-t="' + t.id + '"]'); if (cb) cb.checked = t.get(); } }
+  const segHandler = (id, fn) => document.getElementById(id).addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { fn(b.dataset.v); applyState(); } });
+  segHandler('sWall', (v) => { ST.wall = v; }); segHandler('sIns', (v) => { ST.insert = v; if (v === 'stock') ST.explodeGoal = 0; }); segHandler('sLid', (v) => { ST.lidMode = v; });
+  document.getElementById('bLid').addEventListener('click', () => { ST.lidOpen = !ST.lidOpen; applyState(); });
+  document.getElementById('bExplode').addEventListener('click', () => {
+    ST.explodeGoal = ST.explodeGoal > 0.5 ? 0 : 1; if (ST.explodeGoal > 0.5) { ST.insert = 'ours'; setView('explode', false); }
+    applyState();
+  });
+  document.getElementById('views').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setView(b.dataset.v, false); });
+
+  // ---- picking
+  const ray = new THREE.Raycaster(); let selected = null;
+  function pick(cx, cy) {
+    const r = el.getBoundingClientRect(); ray.setFromCamera(new THREE.Vector2(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1), camera);
+    const hits = ray.intersectObjects(parts.filter((p) => p.obj.visible).map((p) => p.obj), false); if (!hits.length) return;
+    const solid = hits.find((h) => h.object.material.opacity >= 0.5) || hits[0]; select(parts.find((p) => p.obj === solid.object));
+  }
+  function select(p) {
+    if (selected) selected.obj.material.emissive.setHex(0x000000);
+    selected = p; if (!p) return; p.obj.material.emissive.setHex(0x553300);
+    const r = lookup(p.name);
+    info.innerHTML = r ? '<b>' + r[1] + '</b><span class="tag ' + r[3] + '">' + SRC[r[3]] + '</span><br>' + r[2] : '<b>' + p.name + '</b><br>설명 없음'; dirty = true;
+  }
+  function applyQuery() {
+    const q = new URLSearchParams(location.search);                                         // test hooks: ?view=insert&sel=cell body&wall=ghost&ins=stock&lid=B&open=0&explode=1&drive=1
+    if (q.get('wall')) ST.wall = q.get('wall'); if (q.get('ins')) ST.insert = q.get('ins'); if (q.get('lid')) ST.lidMode = q.get('lid');
+    if (q.get('open') === '0') { ST.lidOpen = false; lidAng = 0; } if (q.get('drive') === '1') ST.drive = true; if (q.get('explode') === '1') { ST.explodeGoal = 1; ST.explode = 1; applyExplode(); }
+    syncToggles(); applyState();
+    if (q.get('explode') === '1' && !q.get('view')) setView('explode', true);
+    if (q.get('view') && PRESETS[q.get('view')]) { setView(q.get('view'), true); if (q.get('wall')) { ST.wall = q.get('wall'); applyState(); } }
+    if (q.get('sel')) { const t = parts.find((p) => p.name.indexOf(q.get('sel')) === 0); if (t) select(t); }
+  }
+
+  // ---- loop
+  let lidAng = META.lid_open_deg * Math.PI / 180;
+  function frame() {
+    requestAnimationFrame(frame); if (document.hidden) return;
+    const k = 0.2, dAz = goal.az - orb.az, dPol = goal.pol - orb.pol, dR = goal.r - orb.r, dT = goal.target.distanceTo(orb.target);
+    if (Math.abs(dAz) + Math.abs(dPol) + Math.abs(dR) + dT > 1e-3) { orb.az += dAz * k; orb.pol += dPol * k; orb.r += dR * k; orb.target.lerp(goal.target, k); dirty = true; }
+    const ga = ST.lidOpen ? META.lid_open_deg * Math.PI / 180 : 0;
+    if (Math.abs(ga - lidAng) > 1e-3) { lidAng += (ga - lidAng) * 0.15; dirty = true; } lidPivot.rotation.x = -lidAng;
+    if (Math.abs(ST.explodeGoal - ST.explode) > 1e-3) { ST.explode += (ST.explodeGoal - ST.explode) * 0.18; dirty = true; applyExplode(); }
+    if (!dirty) return;
+    dirty = false; placeCamera(); renderer.render(scene, camera);
+    if (DEBUG) { status.hidden = false; status.textContent = 'parts ' + parts.length + ' calls ' + renderer.info.render.calls + ' tri ' + renderer.info.render.triangles + ' lid ' + lidAng.toFixed(2) + ' exp ' + ST.explode.toFixed(2) + ' | ' + dbgBox(); }
+  }
+  function dbgBox() { const out = []; for (const n of ['lid plate (A)', 'lid inner plate (stock)', 'lid front skirt', 'wall back']) { const p = parts.find((q) => q.name.indexOf(n) === 0); if (!p) { out.push(n + ' none'); continue; } p.obj.updateWorldMatrix(true, false); out.push('parent ' + (p.obj.parent === lidPivot) + ' piv ' + lidPivot.position.toArray().join(',') + ' rx ' + lidPivot.rotation.x.toFixed(2) + ' pos ' + p.obj.position.toArray().map((v) => v.toFixed(0)).join(',')); const b = new THREE.Box3().setFromObject(p.obj); const c = b.getCenter(new THREE.Vector3()); out.push(n + ' ' + c.toArray().map((v) => v.toFixed(0)).join(',') + ' vis ' + p.obj.visible); } return out.join(' ; '); }
+  function applyExplode() {
+    for (const p of parts) {
+      if (p.lid) continue;
+      let off = 0; for (const [re, d] of EXPL) if (re.test(p.name)) { off = d; break; }
+      p.obj.position.copy(p.base).addScaledVector(NVc, off * ST.explode);
+    }
+    if (ST.explodeGoal < 0.05 && ST.explode < 0.05) applyState();
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { resize(); dirty = true; } });
+  window.addEventListener('error', (e) => { status.textContent = '오류: ' + e.message; });
+  resize(); setView('all', true); load(); frame();
+})();
+</script>
+</body>
+</html>
