@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>FS5 SC-10 안 조명 출력부 배치 v10</title>
+<title>FS5 SC-10 안 조명 출력부 배치 v11</title>
 <link rel="icon" href="data:,">
 <style>
   :root { --bg:#eef0f3; --ink:#1d2430; --line:#cfd5de; --acc:#1f3b63; --m:#1a8f3c; --e:#c47f00; --a:#6b7280; --s:#2a6fb5; }
@@ -39,10 +39,10 @@
 </style>
 </head>
 <body>
-<h1>FS5 SC-10 안 조명 출력부 배치 v10 (러프, 2026-11-15)</h1>
+<h1>FS5 SC-10 안 조명 출력부 배치 v11 (러프, 2026-11-15)</h1>
 <div id="stage"><div id="status">모델을 읽는 중…</div></div>
 <div id="panel">
-  <div class="warn">빔 높이는 사진 추정값입니다 (57 mm, ±7). 받침 구조의 치수는 모두 이 배치의 설계값입니다.</div>
+  <div class="warn">빔 높이는 사진 추정값입니다 (57 mm, ±7). 받침 구조의 치수는 모두 이 배치의 설계값이고, SM1RC/M 클램프만 제조사 STEP에서 읽은 실제 치수입니다.</div>
   <div class="row views" id="views">
     <button data-v="all" class="on">전체</button><button data-v="front">정면 통로</button><button data-v="top">위에서</button><button data-v="side">옆에서</button><button data-v="sample">시료 확대</button><button data-v="support">받침 구조 확대</button>
   </div>
@@ -57,17 +57,18 @@
     <li>순정 필터 홀더는 실제 부품이라 자리를 옮기지 않았습니다. 시료에서 약 28 mm 앞, 중심선에서 ±41° 방향이고, 위치와 모양은 사진에서 추정한 값입니다.</li>
     <li>시료 뒤 유리(25 × 25 mm), 마스크 구멍 위치, 집게의 모양은 사진에서 보이는 만큼만 그렸습니다. 창 안의 가로선 4줄은 표시용입니다.</li>
     <li>조명 출력부 두 개(백색, 940 nm)는 정면 통로에서 법선 방향으로 ±17° 벌려 나란히 놓았습니다. 시료 앞 60 mm이고, 위치와 각도는 v9와 같습니다.</li>
-    <li>v10에서는 가는 기둥 대신 블록 하나가 출력부 두 개를 잡습니다. 블록은 넓은 바닥판에 나사로 붙고, 바닥판은 시료실 바닥에 올려놓기만 합니다. SC-10 받침판 앞쪽을 ㄷ자로 감싸 3점(앞변 2점, 오른쪽 옆변 1점)에 맞춤 핀이 닿고, 반대쪽에서 손나사 두 개가 고무 패드로 앞벽과 왼쪽 벽을 밀어 붙입니다. 장비에는 구멍, 접착, 나사 풀기가 없습니다.</li>
+    <li>v11에서는 출력부 두 개를 이미 가지고 있는 금속 클램프 SM1RC/M 두 개가 잡습니다. 클램프는 PLA 받침 윗부분의 기운 자리면에 M4 볼트 하나로 붙고, 클램프 옆면을 받는 턱이 양쪽에 있어 돌아가지 않습니다. 받침 윗부분은 다리 두 개 위에 놓여 ∩ 모양으로 조절 봉과 커플링을 넘습니다. PLA에는 나사산을 내지 않았고, 모든 체결은 통과 볼트와 옆에서 끼우는 너트 자리입니다.</li>
+    <li>바닥판(6 mm)은 시료실 바닥에 올려놓기만 합니다. SC-10 받침판 앞쪽을 ㄷ자로 감싸 3점(앞변 2점, 오른쪽 옆변 1점)에 맞춤 핀이 닿고, 반대쪽에서 손나사 두 개가 고무 패드로 앞벽과 왼쪽 벽을 밀어 붙입니다. 장비에는 구멍, 접착, 나사 풀기가 없습니다.</li>
     <li>SC-10 받침판이 장비에 고정되어 있다는 것, 앞벽과 왼쪽 벽의 안쪽 면이 평평해서 고무 패드로 밀 수 있다는 것은 가정입니다.</li>
     <li>집속 렌즈(f = 출력부 거리)는 주문 목록에 없는 가정입니다. 이 렌즈가 있어야 반점이 Ø5.7 mm가 됩니다.</li>
-    <li>광섬유는 받침 (a), (b) 두 곳의 V홈에서 출력부 축 연장선 위로 곧게 잡히고, (b) 뒤에서 아래로 휘어 앞벽 위 덧테 조각의 반원 홈으로 나갑니다. 휘는 부분의 반경은 약 190 mm로 Thorlabs 사양(장기 158 mm, 단기 79 mm)을 모두 넘습니다. 홈 위쪽은 열려 있고, 남은 틈은 검은 스펀지로 막습니다. 틈으로 빛이 새는지는 확인이 필요합니다.</li>
+    <li>광섬유는 SMA 플러그 끝에서 약 36 mm 뒤, 하나의 탑 위 V홈 두 줄에 덮개 하나로 눌려 출력부 축 연장선 위로 곧게 잡힙니다. 축이 위로 20°라 이 자리의 광섬유는 빔 높이보다 52 mm 위(바닥에서 약 109 mm)이고, 그래서 받침은 낮게 만들 수 없습니다. 탑 뒤에서 반경 160 mm로 구부러져 앞벽 위 덧테 조각의 반원 홈으로 나갑니다. 반경 160 mm는 Thorlabs 사양(장기 158 mm, 단기 79 mm)을 모두 넘습니다. 홈 위쪽은 열려 있고, 남은 틈은 검은 스펀지로 막습니다. 틈으로 빛이 새는지는 확인이 필요합니다.</li>
     <li>인터록(뚜껑 닫힘 감지) 방식은 미확인입니다. 덧테로 뚜껑을 띄워도 닫힘으로 인식하는지 장비 담당자와 시험이 필요합니다.</li>
     <li>검토용 러프 배치이며 제작 도면이 아닙니다. 한 손가락으로 돌리고, 두 손가락으로 확대하거나 옮깁니다.</li>
   </ul>
 </div>
 <script src="three_core.js"></script>
 <script src="gltf_loader.js"></script>
-<script src="pl_v10_model.js"></script>
+<script src="pl_v11_model.js"></script>
 <script>
 (function () {
   'use strict';
@@ -126,28 +127,34 @@
     [/^SM1SMA/, 'SM1SMA 어댑터 (Thorlabs)', 'SMA 광섬유 플러그를 SM1 튜브 뒤에 연결하는 Ø30.5 × 3.5 mm 부품.', 'S'],
     [/^SMA plug/, 'SMA 플러그', '광섬유 끝의 SMA 커넥터.', 'S'],
     [/^strain relief/, '피복 보호 고무', '광섬유가 꺾이지 않게 잡아 주는 부분. 검은 수축 튜브 색.', 'A'],
-    [/^jig base plate/, '바닥판 (두께 4 mm)', '시료실 바닥에 올려놓는 넓은 판입니다. SC-10 받침판 앞쪽을 ㄷ자로 감싸고, 가운데 폭 28 mm 홈으로 커플링이 지나갑니다. 블록과 광섬유 받침이 이 판에 나사로 붙습니다. 검은 종이 가림막과 겹치지 않게 뒤쪽 폭을 줄였습니다. 장비에 구멍, 접착, 나사 풀기가 없습니다.', 'A'],
-    [/^jig locating pin/, '맞춤 핀 Ø5 (3개)', '앞변 2점(좌우 ±22 mm)과 오른쪽 옆변 1점이 SC-10 받침판 가장자리에 닿습니다. 반대쪽에서 손나사가 밀기 때문에 넣고 뺄 때마다 판이 같은 자리에 놓입니다.', 'A'],
-    [/^jig hand-screw boss/, '손나사 자리', '바닥판 위에 세운 작은 덩어리. M6 나사를 낼 구멍이 있습니다.', 'A'],
-    [/^jig hand screw/, '손나사 M6', '끝의 고무 패드로 시료실 앞벽(앞쪽 나사) 또는 왼쪽 벽(왼쪽 나사) 안쪽 면을 밀어 바닥판을 SC-10 받침판 쪽으로 붙입니다. 머리는 위에서 손으로 돌립니다. 벽 위치는 v9 값을 썼습니다.', 'A'],
+    [/^jig base plate/, '바닥판 (PLA, 두께 6 mm + 테두리)', '시료실 바닥에 올려놓는 넓은 판입니다. SC-10 받침판 앞쪽을 ㄷ자로 감싸고, 가운데 폭 22 mm 홈 위로 조절 봉이, 폭 28 mm 홈으로 커플링이 지나갑니다. 다리와 광섬유 탑이 이 판에 M4 접시머리 볼트로 붙습니다. 가장자리 테두리(5 × 4 mm)가 판을 뻣뻣하게 합니다. 장비에 구멍, 접착, 나사 풀기가 없습니다.', 'A'],
+    [/^jig locating pin/, '맞춤 핀 Ø5 × 10 (3개)', '앞변 2점(좌우 ±22 mm)과 오른쪽 옆변 1점이 SC-10 받침판 가장자리에 닿습니다. 반대쪽에서 손나사가 밀기 때문에 넣고 뺄 때마다 판이 같은 자리에 놓입니다.', 'A'],
+    [/^jig hand screw/, '손나사 M6 × 30', '끝의 고무 패드로 시료실 앞벽(앞쪽 나사) 또는 왼쪽 벽(왼쪽 나사) 안쪽 면을 밀어 바닥판을 SC-10 받침판 쪽으로 붙입니다. 나사산은 바닥판 안 너트에서 맞물립니다. 벽 위치는 v9 값을 썼습니다.', 'A'],
+    [/^jig nut M6/, 'M6 너트', '바닥판 손나사 자리의 위가 열린 홈에 끼워 넣습니다. 육각이라 홈 안에서 돌지 않습니다.', 'A'],
     [/^jig rubber pad/, '고무 패드', '손나사 끝의 Ø8 × 2.5 mm 패드. 벽에 흠집을 내지 않고 미끄러지지 않게 합니다.', 'A'],
-    [/^jig screw M/, '바닥판 고정 나사', '바닥판 아래에서 올려 조이는 나사. 머리는 바닥판 안에 묻혀서 바닥에 닿지 않습니다. 블록 다리에 M5 네 개, 광섬유 받침마다 M4 두 개.', 'A'],
-    [/^jig block/, '조명 출력부 블록', '출력부 두 개를 Ø30.6 구멍에 끼워 잡는 블록 하나입니다. 구멍 앞쪽의 턱에 닿을 때까지 밀어 넣으면 매번 시료 앞 60 mm에 옵니다. 두 다리와 가로판이 ∩ 모양으로 조절 봉과 커플링을 넘고(여유 4 mm 이상), 바닥판에 M5 나사 네 개로 붙습니다. 검은 출력물 또는 검은 아노다이징 알루미늄 가공. 구멍 사이 최소 살 약 3.5 mm.', 'A'],
-    [/^jig set screw/, '조임 나사 M4 (나일론 팁)', '블록 위에서 출력부 튜브를 눌러 잡는 나사. 출력부마다 두 개. 나일론 팁이라 튜브에 자국이 나지 않습니다.', 'A'],
-    [/^jig fibre post . \(.*cover/, '광섬유 받침 덮개', 'V홈에 놓인 광섬유 재킷을 위에서 누르는 덮개. 나사 2개로 조입니다.', 'A'],
-    [/^jig fibre post/, '광섬유 받침', '바닥판에서 올라온 받침. V홈에 Ø5 재킷을 놓습니다. 광섬유마다 두 곳: (a) SMA 뒤 약 36 mm, (b) 앞벽 쪽 출구 앞. 둘 사이와 출력부까지는 출력부 축 연장선 위의 직선입니다.', 'A'],
-    [/^jig post screw/, '받침 덮개 나사 M3', '덮개를 받침에 조이는 나사.', 'A'],
+    [/^SM1RC\/M clamp/, 'SM1RC/M 클램프 (Thorlabs 순정, 이미 보유)', '출력부 튜브(SM1L15, 바깥지름 30.5)를 Ø30.6 구멍으로 물고 옆 나사로 조입니다. 두께 10.16 mm, 옆면 폭 35.56 mm, 바닥면(M4 탭 가운데)까지 구멍 중심에서 22.1 mm. 모양과 치수는 제조사 STEP에서 읽었습니다. 조임 나사 머리는 바깥(왼쪽 클램프는 왼쪽, 오른쪽은 오른쪽)을 향합니다.', 'S'],
+    [/^jig cap/, '받침 윗부분 (PLA, 자리 2개)', '두 클램프를 얹는 덩어리 하나입니다. 자리면은 출력부 축이 수평에서 위로 20°, 가운데선에서 좌우 ±17°가 되도록 기운 평면이고, 클램프 옆면을 받는 5 mm 턱이 양쪽에 있습니다(0.3 mm 간격). 자리 가운데에서 M4 볼트가 아래로 통과하며, 머리·와셔 자리는 아래쪽(앞쪽으로 열림)에 있습니다. 뒤쪽 선반에서 M4 볼트 4개로 다리에 조입니다. 평평한 아래면을 베드에 놓고 지지대 없이 출력합니다.', 'A'],
+    [/^jig leg/, '다리 (PLA)', '바닥판에서 받침 윗부분을 받치는 낮은 기둥입니다. 폭 26 mm, 바깥면에 삼각 보강이 2개 있습니다. 아래에서 올라오는 M4 접시머리 볼트 2개로 바닥판에 붙고, 너트는 다리 옆 홈에 끼웁니다. 두 다리 사이로 조절 봉과 커플링이 지나갑니다(커플링과 6 mm 이상).', 'A'],
+    [/^jig fibre tower/, '광섬유 탑 (PLA)', '바닥판에서 올라오는 넓은 벽 하나입니다. 위쪽 면 하나가 수평에서 20.8° 기울어 있고 그 면에 V홈 두 줄이 파여 있습니다(두 광섬유 축이 모두 이 면 안에 있음). 가운데 삼각 개구부로 조절 봉이 지납니다. SMA 플러그 끝에서 약 36 mm 뒤, 높이는 바닥에서 약 109 mm입니다. 바닥판에 M4 접시머리 볼트 4개로 붙습니다.', 'A'],
+    [/^jig fibre cover/, '광섬유 덮개 (PLA)', '두 광섬유 재킷을 한꺼번에 위에서 누르는 덮개 하나입니다. M3 볼트 4개를 탑 안 너트에 조입니다. V홈이 아래를 향하도록 뒤집어 출력합니다.', 'A'],
+    [/^jig bolt M4x20/, '클램프 볼트 M4 × 20', '받침 윗부분을 아래에서 위로 통과해 클램프 바닥의 M4 탭에 약 5.5 mm 물립니다. 머리는 PLA 아래쪽 자리에 와셔와 함께 놓입니다.', 'A'],
+    [/^jig washer M4/, '와셔 M4 (Ø9 × 0.8)', '클램프 볼트 머리 밑의 와셔.', 'A'],
+    [/^jig bolt M4x16/, '접시머리 볼트 M4 × 16', '바닥판 아래에서 올라와 다리 또는 광섬유 탑 안의 너트에 조입니다. 머리는 바닥판의 접시 자리에 묻혀 바닥에 닿지 않습니다.', 'A'],
+    [/^jig bolt M4x25/, '볼트 M4 × 25', '받침 윗부분 뒤쪽 선반 위에서 내려가 다리 안 너트에 조입니다(다리마다 2개).', 'A'],
+    [/^jig nut M4/, '너트 M4', '다리 또는 광섬유 탑의 옆 홈에 밀어 넣는 육각 너트(대변 7 mm)입니다. PLA에는 나사산이 없습니다.', 'A'],
+    [/^jig bolt M3x20/, '덮개 볼트 M3 × 20', '덮개 위에서 내려가 탑 안 너트에 조입니다(4개).', 'A'],
+    [/^jig nut M3/, '너트 M3', '탑 위쪽의 얇은 옆 홈에 들어가는 육각 너트(대변 5.5 mm)입니다.', 'A'],
     [/^printed strip/, '덧테 조각 (출력, 반원 홈)', '앞벽 위에 올려 두는 조각으로, 광섬유가 놓이는 반원 홈이 있습니다. 위가 열려 있어 뚜껑을 열고 광섬유를 들어 올리면 홈에서 그냥 빠집니다.', 'A'],
     [/^black sponge/, '검은 스펀지', '뚜껑 앞 가림판 아래 틈에서 광섬유 자리만 비우고 나머지를 막습니다. 광섬유 위는 비워 두어 뚜껑이 광섬유를 누르지 않습니다(광섬유 윗끝에서 가림판 아래까지 약 4 mm). 빛이 새는지는 확인이 필요합니다.', 'A'],
-    [/^fibre white/, '광섬유 (백색, M107L02)', '피복 Ø5.0. 최소 굽힘 반경은 사양으로 장기 158 mm, 단기 79 mm입니다. 받침 (b) 뒤에서 아래로 휘는 부분의 반경은 약 %RW% mm라서 두 기준을 모두 넘습니다. 덧테 조각의 홈을 지나 뚜껑 앞 틈으로 나갑니다.', 'S'],
-    [/^fibre 940/, '광섬유 (940 nm, M107L02)', '피복 Ø5.0. 최소 굽힘 반경은 사양으로 장기 158 mm, 단기 79 mm입니다. 받침 (b) 뒤에서 아래로 휘는 부분의 반경은 약 %RI% mm라서 두 기준을 모두 넘습니다.', 'S'],
+    [/^fibre white/, '광섬유 (백색, M107L02)', '피복 Ø5.0. 최소 굽힘 반경은 사양으로 장기 158 mm, 단기 79 mm입니다. 탑 뒤에서 아래로 휘는 부분의 반경은 약 %RW% mm라서 두 기준을 모두 넘습니다. 덧테 조각의 홈을 지나 뚜껑 앞 틈으로 나갑니다.', 'S'],
+    [/^fibre 940/, '광섬유 (940 nm, M107L02)', '피복 Ø5.0. 최소 굽힘 반경은 사양으로 장기 158 mm, 단기 79 mm입니다. 탑 뒤에서 아래로 휘는 부분의 반경은 약 %RI% mm라서 두 기준을 모두 넘습니다.', 'S'],
     [/^rod extension/, '봉 연장 (바깥 구동)', '봉 끝에 이어 붙이는 Ø8 봉.', 'A'],
     [/^flexible coupling O20/, '유연 커플링 (바깥 구동)', '봉과 같은 축에 놓은 커플링. 벨트 대신 모터 축을 바로 잇습니다.', 'A'],
     [/^motor shaft/, '모터 축 Ø5', '스텝모터 축.', 'A'],
     [/^NEMA17/, 'NEMA17 스텝모터 (바깥, 선택)', '초점 봉을 돌리는 모터 42 × 42 × 40 mm. 탁자에 고정합니다. 빔타임 뒤 항목.', 'A'],
     [/^table-edge/, '탁자 고정 브래킷 (출력)', '탁자 가장자리를 물어 모터를 받칩니다. 장비에는 나사를 박지 않습니다.', 'A'],
   ];
-  const ST = { wall: 'solid', lidOpen: true, beams: { exc: true, det: true, w: false, ir: false, spec: true }, light: true, block: true, plate: true, thumb: true, post: true, strip: true, fibre: true, holders: true, lpf: true, mask: true, shield: true, collar: true, drive: false };
+  const ST = { wall: 'solid', lidOpen: true, beams: { exc: true, det: true, w: false, ir: false, spec: true }, light: true, cap: true, plate: true, thumb: true, tower: true, clamp: true, hw: true, strip: true, fibre: true, holders: true, lpf: true, mask: true, shield: true, collar: true, drive: false };
   const TOG = [
     { id: 'exc', label: 'FS5 여기빔(Xe)', get: () => ST.beams.exc, set: (v) => { ST.beams.exc = v; } },
     { id: 'det', label: '발광(검출)', get: () => ST.beams.det, set: (v) => { ST.beams.det = v; } },
@@ -155,10 +162,12 @@
     { id: 'irbeam', label: '940 nm 조명빔', get: () => ST.beams.ir, set: (v) => { ST.beams.ir = v; } },
     { id: 'spec', label: '정반사 선', get: () => ST.beams.spec, set: (v) => { ST.beams.spec = v; } },
     { id: 'light', label: '조명 출력부 2개', get: () => ST.light, set: (v) => { ST.light = v; } },
-    { id: 'block', label: '출력부 블록', get: () => ST.block, set: (v) => { ST.block = v; } },
+    { id: 'clamp', label: 'SM1RC/M 클램프', get: () => ST.clamp, set: (v) => { ST.clamp = v; } },
+    { id: 'cap', label: '받침 윗부분 + 다리', get: () => ST.cap, set: (v) => { ST.cap = v; } },
     { id: 'plate', label: '바닥판 + 맞춤 핀', get: () => ST.plate, set: (v) => { ST.plate = v; } },
     { id: 'thumb', label: '손나사 + 고무 패드', get: () => ST.thumb, set: (v) => { ST.thumb = v; } },
-    { id: 'post', label: '광섬유 받침', get: () => ST.post, set: (v) => { ST.post = v; } },
+    { id: 'tower', label: '광섬유 탑 + 덮개', get: () => ST.tower, set: (v) => { ST.tower = v; } },
+    { id: 'hw', label: '볼트·너트·와셔', get: () => ST.hw, set: (v) => { ST.hw = v; } },
     { id: 'strip', label: '덧테 홈 + 스펀지', get: () => ST.strip, set: (v) => { ST.strip = v; } },
     { id: 'fibre', label: '광섬유', get: () => ST.fibre, set: (v) => { ST.fibre = v; } },
     { id: 'holders', label: '순정 필터 홀더', get: () => ST.holders, set: (v) => { ST.holders = v; } },
@@ -200,7 +209,7 @@
     side: () => ({ target: cad(0, -60, 20), az: -Math.PI / 2, pol: Math.PI / 2, r: 900 * fit(), wall: 'ghost' }),
     front: () => ({ target: cad(0, -75, 18), az: 0.35, pol: 0.95, r: 330 * fit(), wall: 'ghost' }),
     sample: () => ({ target: cad(0, -15, 8), az: 0.55, pol: 1.0, r: 200 * fit(), wall: 'ghost' }),
-    support: () => ({ target: cad(0, -100, 0), az: 0.75, pol: 0.82, r: 470 * fit(), wall: 'ghost' }),
+    support: () => ({ target: cad(0, -105, 12), az: 2.3, pol: 0.95, r: 330 * fit(), wall: 'ghost' }),
   };
   const finite = (v) => isFinite(v) && !isNaN(v);
   let dirty = true;
@@ -307,11 +316,12 @@
     if (g === 'drive') return ST.drive;
     if (g === 'fplate') { if (SAMPLEN.test(n)) return ST.mask; if (/^(filter holder|carriage)/.test(n) && /^filter holder/.test(n)) return ST.holders; return true; }
     if (g === 'light_W' || g === 'light_IR') return ST.light;
-    if (g === 'jig_block') return ST.block;
+    if (g === 'jig_clamp') return ST.clamp;
+    if (g === 'jig_cap' || g === 'jig_leg') return ST.cap;
     if (g === 'jig_plate' || g === 'jig_pin') return ST.plate;
     if (g === 'jig_thumb') return ST.thumb;
-    if (g === 'jig_post' || g === 'jig_cover') return ST.post;
-    if (g === 'jig_screw') return /^jig set screw/.test(n) ? ST.block : (/^jig post screw/.test(n) ? ST.post : ST.plate);
+    if (g === 'jig_tower' || g === 'jig_cover') return ST.tower;
+    if (g === 'jig_screw') return ST.hw;
     if (g === 'foam' || g === 'fgroove') return ST.strip && ST.wall !== 'hide';
     if (g === 'cab') return ST.fibre;
     return true;
@@ -360,12 +370,12 @@
     info.innerHTML = r ? '<b>' + r[1] + '</b><span class="tag ' + r[3] + '">' + SRC[r[3]] + '</span><br>' + txt : '<b>' + p.name + '</b><br>설명 없음'; dirty = true;
   }
   function applyQuery() {
-    const q = new URLSearchParams(location.search);                                         // test hooks: ?view=support&sel=jig block&wall=ghost&open=0&drive=1&collar=0&mask=0&block=0&plate=0&post=0&strip=0&light=0&preset=during
+    const q = new URLSearchParams(location.search);                                         // test hooks: ?view=support&sel=jig cap&wall=ghost&open=0&drive=1&collar=0&mask=0&cap=0&clamp=0&hw=0&tower=0&plate=0&strip=0&light=0&preset=during
     if (q.get('wall')) ST.wall = q.get('wall');
     if (q.get('preset') && PRESETS_BEAM[q.get('preset')]) { const pp = PRESETS_BEAM[q.get('preset')]; ST.preset = q.get('preset'); ST.beams.exc = pp.exc; ST.beams.det = pp.det; ST.beams.w = pp.w; ST.beams.ir = pp.ir; }
     if (q.get('beams') === 'w') { ST.beams.w = true; ST.beams.ir = true; }
     if (q.get('open') === '0') { ST.lidOpen = false; lidAng = lidGoal(); } if (q.get('drive') === '1') ST.drive = true; if (q.get('collar') === '0') ST.collar = false;
-    if (q.get('mask') === '0') ST.mask = false; if (q.get('block') === '0') ST.block = false; if (q.get('plate') === '0') ST.plate = false; if (q.get('post') === '0') ST.post = false; if (q.get('strip') === '0') ST.strip = false; if (q.get('thumb') === '0') ST.thumb = false; if (q.get('light') === '0') ST.light = false; if (q.get('shield') === '0') ST.shield = false;
+    if (q.get('mask') === '0') ST.mask = false; if (q.get('cap') === '0') ST.cap = false; if (q.get('clamp') === '0') ST.clamp = false; if (q.get('hw') === '0') ST.hw = false; if (q.get('tower') === '0') ST.tower = false; if (q.get('plate') === '0') ST.plate = false; if (q.get('strip') === '0') ST.strip = false; if (q.get('thumb') === '0') ST.thumb = false; if (q.get('light') === '0') ST.light = false; if (q.get('shield') === '0') ST.shield = false;
     syncToggles(); applyState();
     if (q.get('view') && PRESETS[q.get('view')]) { setView(q.get('view'), true); if (q.get('wall')) { ST.wall = q.get('wall'); applyState(); } }
     if (q.get('az')) { goal.az = orb.az = parseFloat(q.get('az')); } if (q.get('pol')) { goal.pol = orb.pol = parseFloat(q.get('pol')); } if (q.get('r')) { goal.r = orb.r = parseFloat(q.get('r')); }
